@@ -97,6 +97,8 @@
         @synchronized(self) {
             if (error) {
                 localCompletionBlock(nil, error);
+                recursiveFetch = nil;
+                self.operation = nil;
             } else {
                 [results addObjectsFromArray:items];
                 
@@ -118,12 +120,15 @@
                     if (self.isCancelled) {
                         error = [NSError errorWithDomain:BOXContentSDKErrorDomain code:BOXContentSDKAPIUserCancelledError userInfo:nil];
                         localCompletionBlock(nil, error);
+                        recursiveFetch = nil;
                     } else {
                         [self performPaginatedRequestWithCompletion:recursiveFetch];
                     }
                 } else {
                     NSArray *dedupedResults = [BOXFolderItemsRequest dedupeItemsByBoxID:results];
                     localCompletionBlock(dedupedResults, nil);
+                    recursiveFetch = nil;
+                    self.operation = nil;
                 }
             }
         }
