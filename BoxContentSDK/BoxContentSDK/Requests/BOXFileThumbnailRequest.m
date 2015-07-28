@@ -92,11 +92,13 @@
             UIImage *image = [UIImage imageWithData:data scale:[[UIScreen mainScreen] scale]];
             [BOXDispatchHelper callCompletionBlock:^{
                 completionBlock(image, nil);
+                self.operation = nil;
             } onMainThread:isMainThread];
         };
         dataOperation.failureBlock = ^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             [BOXDispatchHelper callCompletionBlock:^{
                 completionBlock(nil, error);
+                self.operation = nil;
             } onMainThread:isMainThread];
         };
     }

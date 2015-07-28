@@ -92,11 +92,13 @@
 
             [BOXDispatchHelper callCompletionBlock:^{
                 completionBlock(folder, nil);
+                self.operation = nil;
             } onMainThread:isMainThread];
         };
         folderOperation.failure = ^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, NSDictionary *JSONDictionary) {
             [BOXDispatchHelper callCompletionBlock:^{
                 completionBlock(nil, error);
+                self.operation = nil;
             } onMainThread:isMainThread];
         };
     }
